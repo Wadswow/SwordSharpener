@@ -1,8 +1,9 @@
-import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
+import sword from "./sword.jpg";
 import "./style.css";
 
 document.body.innerHTML = `
-  <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
+  <h1>Welcome to Sword Sharpener</h1>
+  <p><button id="sharpened"><img src="${sword}" class="icon" /></button></p>
+  <p>^ click the sword to sharpen</p>
+  <h4>Swords Sharpened: <span id ="counter">0</span></h4>
 `;
-
-// I reviewed this code, for now both of us have this incomplete.
