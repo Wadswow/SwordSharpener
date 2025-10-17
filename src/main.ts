@@ -17,3 +17,9 @@ button.addEventListener("click", () => {
   counter += 1;
   counterElement.innerHTML = counter.toString();
 });
+
+function autoclick() {
+  counter += 1;
+  counterElement.innerHTML = counter.toString();
+}
+setInterval(autoclick, 1000);
