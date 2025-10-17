@@ -18,8 +18,17 @@ button.addEventListener("click", () => {
   counterElement.innerHTML = counter.toString();
 });
 
-function autoclick() {
-  counter += 1;
-  counterElement.innerHTML = counter.toString();
+const zero = performance.now();
+let lastSecond = -1;
+function autoclick(currentTime: number) {
+  const elapsed = Math.floor((currentTime - zero) / 1000);
+  if (elapsed < 1000) {
+    if (elapsed > lastSecond) {
+      counter += 1;
+      counterElement.innerHTML = counter.toString();
+      lastSecond = elapsed;
+    }
+    requestAnimationFrame(autoclick);
+  }
 }
-setInterval(autoclick, 1000);
+requestAnimationFrame(autoclick);
