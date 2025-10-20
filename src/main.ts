@@ -9,7 +9,7 @@ const zero = performance.now();
 let lastSecond = -1;
 let increment = 0;
 
-//autoclicker handler (using requstAnimationFrame)
+//autoclicker handler
 function autoclick(currentTime: number) {
   const elapsed = Math.floor((currentTime - zero) / 1000);
   if (elapsed < 1000) {
