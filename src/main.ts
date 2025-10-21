@@ -2,131 +2,91 @@ import sword from "./sword.jpg";
 import "./style.css";
 
 let counter: number = 0;
-let totalGrind: number = 0;
-let totalSmith: number = 0;
-let totalForge: number = 0;
-let grindPrice: number = 10;
-let smithPrice: number = 100;
-let forgePrice: number = 1000;
-const zero = performance.now();
-let lastSecond = -1;
+let zero = performance.now();
 let increment = 0;
 
 //autoclicker handler
 function autoclick(currentTime: number) {
-  const elapsed = Math.floor((currentTime - zero) / 1000);
-  if (elapsed < 1000) {
-    if (elapsed > lastSecond) {
-      counter += increment;
-      counterElement.innerHTML = counter.toFixed(1);
-      lastSecond = elapsed;
-      areButtonsDisabled();
-    }
-    requestAnimationFrame(autoclick);
-  }
+  const elapsed = currentTime - zero;
+  zero = currentTime;
+  counter += (increment * elapsed) / 1000;
+  updateDisplay();
+  requestAnimationFrame(autoclick);
+}
+requestAnimationFrame(autoclick);
+
+//item interface
+interface Item {
+  name: string;
+  price: number;
+  growthRate: number;
+  total: number;
+  element: {
+    countSpan: HTMLSpanElement;
+    priceSpan: HTMLSpanElement;
+    button: HTMLButtonElement;
+    div: HTMLDivElement;
+  } | null;
 }
 
-//disables buttons
-function disableButton(button: HTMLButtonElement, condition: boolean) {
-  button.disabled = condition;
-}
-
-function areButtonsDisabled() {
-  if (counter >= grindPrice) {
-    disableButton(grindButton, false);
-  } else {
-    disableButton(grindButton, true);
-  }
-  if (counter >= smithPrice) {
-    disableButton(smithButton, false);
-  } else {
-    disableButton(smithButton, true);
-  }
-  if (counter >= forgePrice) {
-    disableButton(forgeButton, false);
-  } else {
-    disableButton(forgeButton, true);
-  }
-}
-
-//Price handler
-function increasePrice(price: number) {
-  price = price * 1.15;
-  return price;
-}
+const availableItems: Item[] = [
+  { name: "Grindstone", price: 10, growthRate: 0.1, total: 0, element: null },
+  { name: "Blacksmith", price: 100, growthRate: 2, total: 0, element: null },
+  { name: "Forge", price: 1000, growthRate: 50, total: 0, element: null },
+];
 
 document.body.innerHTML = `
   <h1>Welcome to Sword Sharpener</h1>
   <p><button id="sharpened"><img src="${sword}" class="icon" /></button></p>
   <p>^ click the sword to sharpen</p>
-  <p>Current Production Rate: <span id ="growthRate">0</span></p>
   <h4>Swords Sharpened: <span id ="counter">0</span></h4>
-  <p>Buy Grindstone: <span id ="totalGrind">0</span> <button id="grindstone" disabled>Buy</button> Price: <span id="grindPrice">10</span></p>
-  <p>Buy Blacksmith: <span id ="totalSmith">0</span> <button id="blacksmith" disabled>Buy</button> Price: <span id="smithPrice">100</span></p>
-  <p>Buy Forge: <span id ="totalForge">0</span> <button id="forge" disabled>Buy</button> Price: <span id="forgePrice">1000</span></p>
+  <p>Current Production Rate: <span id ="growthRate">0</span></p>
+  <div id="upgradeItems"></div>
 `;
 
 const clickButton = document.getElementById("sharpened") as HTMLButtonElement;
-const grindButton = document.getElementById("grindstone") as HTMLButtonElement;
-const smithButton = document.getElementById("blacksmith") as HTMLButtonElement;
-const forgeButton = document.getElementById("forge") as HTMLButtonElement;
 const counterElement = document.getElementById("counter") as HTMLElement;
-const grindElement = document.getElementById("totalGrind") as HTMLElement;
-const smithElement = document.getElementById("totalSmith") as HTMLElement;
-const forgeElement = document.getElementById("totalForge") as HTMLElement;
 const growthElement = document.getElementById("growthRate") as HTMLElement;
-const grindPriceElement = document.getElementById("grindPrice") as HTMLElement;
-const smithPriceElement = document.getElementById("smithPrice") as HTMLElement;
-const forgePriceElement = document.getElementById("forgePrice") as HTMLElement;
+const upgrades = document.getElementById("upgradeItems") as HTMLElement;
 
 //button click handler
 clickButton.addEventListener("click", () => {
   counter += 1;
-  counterElement.innerHTML = counter.toFixed(1);
-  areButtonsDisabled();
+  updateDisplay();
 });
 
-grindButton.addEventListener("click", () => {
-  totalGrind += 1;
-  counter -= grindPrice;
-  increment += 0.1;
-  grindPrice = increasePrice(grindPrice);
-  grindPriceElement.innerHTML = grindPrice.toFixed(2);
-  counterElement.innerHTML = counter.toFixed(1);
-  grindElement.innerHTML = totalGrind.toString();
-  growthElement.innerHTML = increment.toFixed(1);
-  if (totalGrind > 0) {
-    requestAnimationFrame(autoclick);
-  }
-  areButtonsDisabled();
-});
+function setupUpgrade(item: Item) {
+  const div = document.createElement("div");
+  div.className = "upgrade";
+  const countSpan = document.createElement("span");
+  const priceSpan = document.createElement("span");
+  const button = document.createElement("button");
+  button.textContent = "Buy";
+  button.disabled = counter < item.price;
+  button.addEventListener("click", () => {
+    if (counter >= item.price) {
+      counter -= item.price;
+      item.total++;
+      increment += item.growthRate;
+      item.price = Math.round(item.price * 1.15 * 100) / 100;
+      updateDisplay();
+    }
+  });
+  div.append(`Buy ${item.name}: `, countSpan, " ");
+  div.append(button, " Price: ", priceSpan, " ");
+  upgrades.appendChild(div);
+  // Cache elements for later updating
+  item.element = { div, countSpan, priceSpan, button };
+}
 
-smithButton.addEventListener("click", () => {
-  totalSmith += 1;
-  counter -= 100;
-  increment += 2;
-  smithPrice = increasePrice(smithPrice);
-  smithPriceElement.innerHTML = smithPrice.toFixed(2);
-  counterElement.innerHTML = counter.toFixed(1);
-  smithElement.innerHTML = totalSmith.toString();
-  growthElement.innerHTML = increment.toFixed(1);
-  if (totalSmith > 0) {
-    requestAnimationFrame(autoclick);
-  }
-  areButtonsDisabled();
-});
-
-forgeButton.addEventListener("click", () => {
-  totalForge += 1;
-  counter -= 1000;
-  increment += 50;
-  forgePrice = increasePrice(forgePrice);
-  forgePriceElement.innerHTML = forgePrice.toFixed(2);
-  counterElement.innerHTML = counter.toFixed(1);
-  forgeElement.innerHTML = totalForge.toString();
-  growthElement.innerHTML = increment.toFixed(1);
-  if (totalForge > 0) {
-    requestAnimationFrame(autoclick);
-  }
-  areButtonsDisabled();
-});
+function updateDisplay() {
+  counterElement.textContent = counter.toFixed(1);
+  growthElement.textContent = increment.toFixed(1);
+  availableItems.forEach((item) => {
+    item.element!.countSpan.textContent = item.total.toString();
+    item.element!.priceSpan.textContent = item.price.toFixed(2);
+    item.element!.button.disabled = counter < item.price;
+  });
+}
+availableItems.forEach(setupUpgrade);
+updateDisplay();
