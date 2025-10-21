@@ -5,6 +5,9 @@ let counter: number = 0;
 let totalGrind: number = 0;
 let totalSmith: number = 0;
 let totalForge: number = 0;
+let grindPrice: number = 10;
+let smithPrice: number = 100;
+let forgePrice: number = 1000;
 const zero = performance.now();
 let lastSecond = -1;
 let increment = 0;
@@ -17,13 +20,13 @@ function autoclick(currentTime: number) {
       counter += increment;
       counterElement.innerHTML = counter.toFixed(1);
       lastSecond = elapsed;
-      if (counter >= 10) {
+      if (counter >= grindPrice) {
         disableButton(grindButton, false);
       }
-      if (counter >= 100) {
+      if (counter >= smithPrice) {
         disableButton(smithButton, false);
       }
-      if (counter >= 1000) {
+      if (counter >= forgePrice) {
         disableButton(forgeButton, false);
       }
     }
@@ -36,15 +39,21 @@ function disableButton(button: HTMLButtonElement, condition: boolean) {
   button.disabled = condition;
 }
 
+//Price handler
+function increasePrice(price: number) {
+  price = price * 1.15;
+  return price;
+}
+
 document.body.innerHTML = `
   <h1>Welcome to Sword Sharpener</h1>
   <p><button id="sharpened"><img src="${sword}" class="icon" /></button></p>
   <p>^ click the sword to sharpen</p>
   <p>Current Production Rate: <span id ="growthRate">0</span></p>
   <h4>Swords Sharpened: <span id ="counter">0</span></h4>
-  <p>Buy Grindstone: <span id ="totalGrind">0</span> <button id="grindstone" disabled>Buy</button></p>
-  <p>Buy Blacksmith: <span id ="totalSmith">0</span> <button id="blacksmith" disabled>Buy</button></p>
-  <p>Buy Forge: <span id ="totalForge">0</span> <button id="forge" disabled>Buy</button></p>
+  <p>Buy Grindstone: <span id ="totalGrind">0</span> <button id="grindstone" disabled>Buy</button> Price: <span id="grindPrice">10</span></p>
+  <p>Buy Blacksmith: <span id ="totalSmith">0</span> <button id="blacksmith" disabled>Buy</button> Price: <span id="smithPrice">100</span></p>
+  <p>Buy Forge: <span id ="totalForge">0</span> <button id="forge" disabled>Buy</button> Price: <span id="forgePrice">1000</span></p>
 `;
 
 const clickButton = document.getElementById("sharpened") as HTMLButtonElement;
@@ -56,33 +65,38 @@ const grindElement = document.getElementById("totalGrind") as HTMLElement;
 const smithElement = document.getElementById("totalSmith") as HTMLElement;
 const forgeElement = document.getElementById("totalForge") as HTMLElement;
 const growthElement = document.getElementById("growthRate") as HTMLElement;
+const grindPriceElement = document.getElementById("grindPrice") as HTMLElement;
+const smithPriceElement = document.getElementById("smithPrice") as HTMLElement;
+const forgePriceElement = document.getElementById("forgePrice") as HTMLElement;
 
 //button click handler
 clickButton.addEventListener("click", () => {
   counter += 1;
   counterElement.innerHTML = counter.toFixed(1);
-  if (counter >= 10) {
+  if (counter >= grindPrice) {
     disableButton(grindButton, false);
   }
-  if (counter >= 100) {
+  if (counter >= smithPrice) {
     disableButton(smithButton, false);
   }
-  if (counter >= 1000) {
+  if (counter >= forgePrice) {
     disableButton(forgeButton, false);
   }
 });
 
 grindButton.addEventListener("click", () => {
   totalGrind += 1;
-  counter -= 10;
+  counter -= grindPrice;
   increment += 0.1;
+  grindPrice = increasePrice(grindPrice);
+  grindPriceElement.innerHTML = grindPrice.toFixed(2);
   counterElement.innerHTML = counter.toFixed(1);
   grindElement.innerHTML = totalGrind.toString();
   growthElement.innerHTML = increment.toFixed(1);
   if (totalGrind > 0) {
     requestAnimationFrame(autoclick);
   }
-  if (counter < 10) {
+  if (counter < grindPrice) {
     grindButton.disabled = true;
   }
 });
@@ -91,13 +105,15 @@ smithButton.addEventListener("click", () => {
   totalSmith += 1;
   counter -= 100;
   increment += 2;
+  smithPrice = increasePrice(smithPrice);
+  smithPriceElement.innerHTML = smithPrice.toFixed(2);
   counterElement.innerHTML = counter.toFixed(1);
   smithElement.innerHTML = totalSmith.toString();
   growthElement.innerHTML = increment.toFixed(1);
   if (totalSmith > 0) {
     requestAnimationFrame(autoclick);
   }
-  if (counter < 100) {
+  if (counter < smithPrice) {
     smithButton.disabled = true;
   }
 });
@@ -106,13 +122,15 @@ forgeButton.addEventListener("click", () => {
   totalForge += 1;
   counter -= 1000;
   increment += 50;
+  forgePrice = increasePrice(forgePrice);
+  forgePriceElement.innerHTML = forgePrice.toFixed(2);
   counterElement.innerHTML = counter.toFixed(1);
   forgeElement.innerHTML = totalForge.toString();
   growthElement.innerHTML = increment.toFixed(1);
   if (totalForge > 0) {
     requestAnimationFrame(autoclick);
   }
-  if (counter < 1000) {
+  if (counter < forgePrice) {
     forgeButton.disabled = true;
   }
 });
