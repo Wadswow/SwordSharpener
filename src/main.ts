@@ -18,6 +18,7 @@ requestAnimationFrame(autoclick);
 //item interface
 interface Item {
   name: string;
+  description: string;
   price: number;
   growthRate: number;
   total: number;
@@ -30,9 +31,48 @@ interface Item {
 }
 
 const availableItems: Item[] = [
-  { name: "Grindstone", price: 10, growthRate: 0.1, total: 0, element: null },
-  { name: "Blacksmith", price: 100, growthRate: 2, total: 0, element: null },
-  { name: "Forge", price: 1000, growthRate: 50, total: 0, element: null },
+  {
+    name: "Grindstone",
+    description: "A rotating wheel that makes sharpening a lot easier",
+    price: 10,
+    growthRate: 0.1,
+    total: 0,
+    element: null,
+  },
+  {
+    name: "Blacksmith",
+    description: "A hardworker and top notch sword sharpener",
+    price: 100,
+    growthRate: 2,
+    total: 0,
+    element: null,
+  },
+  {
+    name: "Forge",
+    description: "Been helping make swords sharp since 4000 B.C.",
+    price: 1000,
+    growthRate: 50,
+    total: 0,
+    element: null,
+  },
+  {
+    name: "Armory",
+    description:
+      "Lots of sharp swords here, must be good place to get it sharpened too",
+    price: 10000,
+    growthRate: 750,
+    total: 0,
+    element: null,
+  },
+  {
+    name: "Castle",
+    description:
+      "Only the sharpest of swords will do! So sword sharpening here is for you!",
+    price: 100000,
+    growthRate: 9000,
+    total: 0,
+    element: null,
+  },
 ];
 
 document.body.innerHTML = `
@@ -72,10 +112,26 @@ function setupUpgrade(item: Item) {
       updateDisplay();
     }
   });
+  const description = document.createElement("div");
+  description.textContent = item.description;
+  description.style.position = "absolute";
+  description.style.display = "none";
+  description.style.backgroundColor = "black";
+  description.style.color = "white";
+  description.style.padding = "4px";
+  document.body.appendChild(description);
+  button.addEventListener("mouseover", () => {
+    const rect = button.getBoundingClientRect();
+    description.style.top = `${rect.bottom + globalThis.scrollY}px`;
+    description.style.left = `${rect.left + globalThis.scrollX}px`;
+    description.style.display = "block";
+  });
+  button.addEventListener("mouseleave", () => {
+    description.style.display = "none";
+  });
   div.append(`Buy ${item.name}: `, countSpan, " ");
   div.append(button, " Price: ", priceSpan, " ");
   upgrades.appendChild(div);
-  // Cache elements for later updating
   item.element = { div, countSpan, priceSpan, button };
 }
 
