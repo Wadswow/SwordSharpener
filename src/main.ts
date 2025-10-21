@@ -20,15 +20,7 @@ function autoclick(currentTime: number) {
       counter += increment;
       counterElement.innerHTML = counter.toFixed(1);
       lastSecond = elapsed;
-      if (counter >= grindPrice) {
-        disableButton(grindButton, false);
-      }
-      if (counter >= smithPrice) {
-        disableButton(smithButton, false);
-      }
-      if (counter >= forgePrice) {
-        disableButton(forgeButton, false);
-      }
+      areButtonsDisabled();
     }
     requestAnimationFrame(autoclick);
   }
@@ -37,6 +29,24 @@ function autoclick(currentTime: number) {
 //disables buttons
 function disableButton(button: HTMLButtonElement, condition: boolean) {
   button.disabled = condition;
+}
+
+function areButtonsDisabled() {
+  if (counter >= grindPrice) {
+    disableButton(grindButton, false);
+  } else {
+    disableButton(grindButton, true);
+  }
+  if (counter >= smithPrice) {
+    disableButton(smithButton, false);
+  } else {
+    disableButton(smithButton, true);
+  }
+  if (counter >= forgePrice) {
+    disableButton(forgeButton, false);
+  } else {
+    disableButton(forgeButton, true);
+  }
 }
 
 //Price handler
@@ -73,15 +83,7 @@ const forgePriceElement = document.getElementById("forgePrice") as HTMLElement;
 clickButton.addEventListener("click", () => {
   counter += 1;
   counterElement.innerHTML = counter.toFixed(1);
-  if (counter >= grindPrice) {
-    disableButton(grindButton, false);
-  }
-  if (counter >= smithPrice) {
-    disableButton(smithButton, false);
-  }
-  if (counter >= forgePrice) {
-    disableButton(forgeButton, false);
-  }
+  areButtonsDisabled();
 });
 
 grindButton.addEventListener("click", () => {
@@ -96,9 +98,7 @@ grindButton.addEventListener("click", () => {
   if (totalGrind > 0) {
     requestAnimationFrame(autoclick);
   }
-  if (counter < grindPrice) {
-    grindButton.disabled = true;
-  }
+  areButtonsDisabled();
 });
 
 smithButton.addEventListener("click", () => {
@@ -113,9 +113,7 @@ smithButton.addEventListener("click", () => {
   if (totalSmith > 0) {
     requestAnimationFrame(autoclick);
   }
-  if (counter < smithPrice) {
-    smithButton.disabled = true;
-  }
+  areButtonsDisabled();
 });
 
 forgeButton.addEventListener("click", () => {
@@ -130,7 +128,5 @@ forgeButton.addEventListener("click", () => {
   if (totalForge > 0) {
     requestAnimationFrame(autoclick);
   }
-  if (counter < forgePrice) {
-    forgeButton.disabled = true;
-  }
+  areButtonsDisabled();
 });
