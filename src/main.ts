@@ -1,6 +1,7 @@
 // ---Imports---
 import sword from "./sword.jpg";
 import "./style.css";
+import SwordSharpeningSound from "./SwordSharpeningSound.mp3";
 
 //---Item-Interface---
 interface Item {
@@ -21,6 +22,9 @@ interface Item {
 let counter: number = 0;
 let lastTime = performance.now();
 let increment = 0;
+const clickSound = new Audio(SwordSharpeningSound);
+clickSound.loop = false;
+clickSound.volume = 0.5;
 
 //---Autoclicker-Handler---
 function autoclick(currentTime: number) {
@@ -98,6 +102,9 @@ const upgrades = document.getElementById("upgradeItems") as HTMLElement;
 clickButton.addEventListener("click", () => {
   counter += 1;
   updateDisplay();
+  //Sound Idea Insprired by Benho612: https://github.com/benho612/CMPM1212-D1-Assignement/blob/main/src/main.ts
+  clickSound.currentTime = 0;
+  clickSound.play();
 });
 
 //---Upgrade-Handler-Function---

@@ -29,3 +29,6 @@ This step took the longest and was the hardest to do. My code up until this poin
 
 **Step 10: Content Expansion**
 For this step I added two new items using the new interface (which made adding items that much easier) and on each item added a description to each one. From there I added some logic to the setupUpgrade function so that the dsescription will show if you hover over the upgrade button for that item.
+
+**UI Improvements made in the code**
+For my first inspiration, it came from Benho612 ([repository here](https://github.com/benho612/CMPM1212-D1-Assignement/blob/main/src/main.ts)). They added in sound design into their clicker game and although they went more above and beyond with their's including adding a volume slider and full songs into the game. I thought that the idea of a little sound in my game could do it some good and so I made a small sound that plays whenever the main button is pressed.
