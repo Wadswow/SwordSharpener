@@ -1,5 +1,5 @@
 // ---Imports---
-import sword from "./sword.jpg";
+import sword from "./sword.png";
 import "./style.css";
 import SwordSharpeningSound from "./SwordSharpeningSound.mp3";
 
@@ -85,24 +85,32 @@ const availableItems: Item[] = [
 //---Basic-Document-Look---
 document.body.innerHTML = `
   <h1>Welcome to Sword Sharpener</h1>
-  <p><button id="sharpened"><img src="${sword}" class="icon" /></button></p>
-  <p>^ click the sword to sharpen</p>
-  <h4>Swords Sharpened: <span id ="counter">0</span></h4>
-  <p>Current Production Rate: <span id ="growthRate">0</span></p>
-  <div id="upgradeItems"></div>
+  <div class="container">
+    <div class="left-side">
+      <h4>Swords Sharpened: <span id ="counter">0</span></h4>
+      <p>Current Production Rate: <span id ="growthRate">0</span></p>
+      <p><button id="sharpened"><img src="${sword}" class="icon" /></button></p>
+    </div>
+    <div class="right-side">
+      <div id="upgradeItems"></div>
+    </div>
+  </div>
 `;
 
 //---DOM-Setup---
 const clickButton = document.getElementById("sharpened") as HTMLButtonElement;
+clickButton.classList.add("sword-button");
+clickButton.classList.add("counter-container");
 const counterElement = document.getElementById("counter") as HTMLElement;
 const growthElement = document.getElementById("growthRate") as HTMLElement;
 const upgrades = document.getElementById("upgradeItems") as HTMLElement;
+upgrades.classList.add("upgrades");
 
 //---Manual-Button-Clicker---
 clickButton.addEventListener("click", () => {
   counter += 1;
   updateDisplay();
-  //Sound Idea Insprired by Benho612: https://github.com/benho612/CMPM1212-D1-Assignement/blob/main/src/main.ts
+  //Sound Idea Insprired by Benho612: https://github.com/benho612/CMPM1212-D1-Assignement
   clickSound.currentTime = 0;
   clickSound.play();
 });
