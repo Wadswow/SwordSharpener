@@ -17,13 +17,13 @@ interface Item {
 }
 
 let counter: number = 0;
-let zero = performance.now();
+let lastTime = performance.now();
 let increment = 0;
 
 //autoclicker handler
 function autoclick(currentTime: number) {
-  const elapsed = currentTime - zero;
-  zero = currentTime;
+  const elapsed = currentTime - lastTime;
+  lastTime = currentTime;
   counter += (increment * elapsed) / 1000;
   updateDisplay();
   requestAnimationFrame(autoclick);
