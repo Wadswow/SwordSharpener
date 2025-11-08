@@ -3,3 +3,11 @@
   vertical-align: top;
   border: 1px solid salmon;
 }
+
+.tooltip {
+  position: absolute;
+  display: none;
+  background-color: black;
+  color: white;
+  padding: 4px;
+}

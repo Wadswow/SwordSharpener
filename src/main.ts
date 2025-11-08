@@ -113,12 +113,8 @@ function setupUpgrade(item: Item) {
     }
   });
   const description = document.createElement("div");
+  description.classList.add("tooltip");
   description.textContent = item.description;
-  description.style.position = "absolute";
-  description.style.display = "none";
-  description.style.backgroundColor = "black";
-  description.style.color = "white";
-  description.style.padding = "4px";
   document.body.appendChild(description);
   button.addEventListener("mouseover", () => {
     const rect = button.getBoundingClientRect();
