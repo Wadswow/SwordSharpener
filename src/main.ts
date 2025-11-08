@@ -1,20 +1,6 @@
 import sword from "./sword.jpg";
 import "./style.css";
 
-let counter: number = 0;
-let zero = performance.now();
-let increment = 0;
-
-//autoclicker handler
-function autoclick(currentTime: number) {
-  const elapsed = currentTime - zero;
-  zero = currentTime;
-  counter += (increment * elapsed) / 1000;
-  updateDisplay();
-  requestAnimationFrame(autoclick);
-}
-requestAnimationFrame(autoclick);
-
 //item interface
 interface Item {
   name: string;
@@ -29,6 +15,20 @@ interface Item {
     div: HTMLDivElement;
   } | null;
 }
+
+let counter: number = 0;
+let zero = performance.now();
+let increment = 0;
+
+//autoclicker handler
+function autoclick(currentTime: number) {
+  const elapsed = currentTime - zero;
+  zero = currentTime;
+  counter += (increment * elapsed) / 1000;
+  updateDisplay();
+  requestAnimationFrame(autoclick);
+}
+requestAnimationFrame(autoclick);
 
 const availableItems: Item[] = [
   {
