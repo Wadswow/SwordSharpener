@@ -1,7 +1,8 @@
+// ---Imports---
 import sword from "./sword.jpg";
 import "./style.css";
 
-//item interface
+//---Item-Interface---
 interface Item {
   name: string;
   description: string;
@@ -16,11 +17,12 @@ interface Item {
   } | null;
 }
 
+//---State---
 let counter: number = 0;
 let lastTime = performance.now();
 let increment = 0;
 
-//autoclicker handler
+//---Autoclicker-Handler---
 function autoclick(currentTime: number) {
   const elapsed = currentTime - lastTime;
   lastTime = currentTime;
@@ -30,6 +32,7 @@ function autoclick(currentTime: number) {
 }
 requestAnimationFrame(autoclick);
 
+//---Upgrade-Set-up---
 const availableItems: Item[] = [
   {
     name: "Grindstone",
@@ -75,6 +78,7 @@ const availableItems: Item[] = [
   },
 ];
 
+//---Basic-Document-Look---
 document.body.innerHTML = `
   <h1>Welcome to Sword Sharpener</h1>
   <p><button id="sharpened"><img src="${sword}" class="icon" /></button></p>
@@ -84,17 +88,19 @@ document.body.innerHTML = `
   <div id="upgradeItems"></div>
 `;
 
+//---DOM-Setup---
 const clickButton = document.getElementById("sharpened") as HTMLButtonElement;
 const counterElement = document.getElementById("counter") as HTMLElement;
 const growthElement = document.getElementById("growthRate") as HTMLElement;
 const upgrades = document.getElementById("upgradeItems") as HTMLElement;
 
-//button click handler
+//---Manual-Button-Clicker---
 clickButton.addEventListener("click", () => {
   counter += 1;
   updateDisplay();
 });
 
+//---Upgrade-Handler-Function---
 function setupUpgrade(item: Item) {
   const div = document.createElement("div");
   div.className = "upgrade";
@@ -131,6 +137,7 @@ function setupUpgrade(item: Item) {
   item.element = { div, countSpan, priceSpan, button };
 }
 
+//---Main-Display-Loop-Function---
 function updateDisplay() {
   counterElement.textContent = counter.toFixed(1);
   growthElement.textContent = increment.toFixed(1);
